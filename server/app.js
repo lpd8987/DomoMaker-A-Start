@@ -1,4 +1,3 @@
-// Part 1
 const path = require('path');
 const express = require('express');
 const compression = require('compression');
@@ -8,6 +7,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const expressHandlebars = require('express-handlebars');
 const helmet = require('helmet');
+const session = require('express-session');
 
 const router = require('./router.js');
 
@@ -21,7 +21,6 @@ mongoose.connect(dbURI, (err) => {
   }
 });
 
-// Part 2
 const app = express();
 
 app.use(helmet());
@@ -30,6 +29,12 @@ app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(session({
+  key: 'sessionid',
+  secret: 'Domo Arigato',
+  resave: true,
+  saveUninitialized: true,
+}));
 app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
