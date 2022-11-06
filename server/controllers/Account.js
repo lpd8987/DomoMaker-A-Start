@@ -3,10 +3,14 @@ const models = require('../models');
 const { Account } = models;
 
 // renders the login page
-const loginPage = (req, res) => res.render('login');
+const loginPage = (req, res) => {
+  res.render('login', { csrfToken: req.csrfToken() });
+};
 
 // renders the signup page
-const signupPage = (req, res) => res.render('signup');
+const signupPage = (req, res) => {
+  res.render('signup', { csrfToken: req.csrfToken() });
+};
 
 // redirect the user to the login (home) page
 const logout = (req, res) => {
