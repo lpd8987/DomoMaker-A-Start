@@ -26,9 +26,9 @@ mongoose.connect(dbURI, (err) => {
 
 const redisURL = process.env.REDISCLOUD_URL || 'redis://default:torX40Xm1mur3m6tiUq2yq3RrG8mAKAM@redis-16378.c8.us-east-1-3.ec2.cloud.redislabs.com:16378';
 
-let redisClient = redis.createClient({
+const redisClient = redis.createClient({
   legacyMode: true,
-  url: redisURL
+  url: redisURL,
 });
 redisClient.connect().catch(console.error);
 
@@ -43,14 +43,14 @@ app.use(bodyParser.json());
 app.use(session({
   key: 'sessionid',
   store: new RedisStore({
-    client: redisClient
+    client: redisClient,
   }),
   secret: 'Domo Arigato',
   resave: true,
   saveUninitialized: true,
   cookie: {
-    httpOnly: true
-  }
+    httpOnly: true,
+  },
 }));
 app.engine('handlebars', expressHandlebars.engine({ defaultLayout: '' }));
 app.set('view engine', 'handlebars');
@@ -59,7 +59,7 @@ app.use(cookieParser());
 
 app.use(csrf());
 app.use((err, req, res, next) => {
-  if(err.code !== 'EBADCSRFTOKEN') return next(err);
+  if (err.code !== 'EBADCSRFTOKEN') return next(err);
 
   console.log('Missing CSRF token!');
   return false;
